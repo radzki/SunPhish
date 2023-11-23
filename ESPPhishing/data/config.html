@@ -1,0 +1,95 @@
+<html>
+<head>
+    <title>ESP Phising Settings</title>
+</head>
+<body style="font-size: 35px;background-color: #404040;text-align: center;color: white;">
+    <span> Current time: </span><span id="time"></span><br><span>Your time: </span><span id="client_time"></span><br><button onclick="sync()" style="width: 150px; height: 50px;">Sync</button>
+    <br><br><br>
+    <span>Battery: %BATTERY_VOLTAGE% volts</span>
+    <br>
+    <span>Solar panel: %PANEL_VOLTAGE% volts</span>
+    <br>
+    <span>Box temperature: %TEMPERATURE% Celsius</span><br><br><br><span style="color: red; --darkreader-inline-color:#ff1a1a;" data-darkreader-inline-color="">Total victims: 3</span><br><br>
+    <label>SLEEP_MAX_HOUR (h):</label>
+    <input type="text" id="sleep_max_hour" value="%SLEEP_MAX_HOUR%" style="
+    height: 35px;
+    font-size: 2rem;
+    width: 3rem;
+    "><br><label>SLEEP_MIN_HOUR (h):</label>
+    <input type="text" id="sleep_min_hour" value="%SLEEP_MIN_HOUR%" style="
+    height: 35px;
+    font-size: 2rem;
+    width: 3rem;
+    "><br><label>CUTOFF_VOLTAGE (mV):</label>
+    <input type="text" id="cutoff_voltage" value="%CUTOFF_VOLTAGE%" style="
+    height: 35px;
+    font-size: 2rem;
+    width: 5rem;
+    ">
+    <br><button onclick="save()" style="width: 150px; height: 50px;">Save</button>
+    <script>
+        function sync(){
+            const XHR = new XMLHttpRequest(),
+            FD = new FormData();
+            FD.append('timestamp', getClientTime());
+            XHR.addEventListener('load', function(event) {
+                alert('Sync was successful.');
+                location.reload();
+            });
+            XHR.addEventListener(' error', function(event) {
+                alert('Oops! Something went wrong.');
+                location.reload();
+            });
+            XHR.open('POST', '/settings');
+            XHR.send(FD);
+        }
+
+        function getInputFieldValue(field) {
+            let f = document.getElementById(field);
+            return f.value;
+        }
+
+        function save(){
+            const XHR = new XMLHttpRequest(),
+            FD = new FormData();
+
+            FD.append('sleep_min_hour', getInputFieldValue('sleep_min_hour'));
+            FD.append('sleep_max_hour', getInputFieldValue('sleep_max_hour'));
+            FD.append('cutoff_voltage', getInputFieldValue('cutoff_voltage'));
+
+            XHR.addEventListener('load', function(event) {
+                alert('Sync was successful.');
+                location.reload();
+            });
+            XHR.addEventListener(' error', function(event) {
+                alert('Oops! Something went wrong.');
+                location.reload();
+            });
+            XHR.open('POST', '/settings');
+            XHR.send(FD);
+        }
+        
+        function secondsToHms(timestamp) {
+            var date = new Date(timestamp * 1000);
+            var timezoneOffset = date.getTimezoneOffset() * 60000;
+            return new Date(date.getTime() + timezoneOffset).toLocaleString("%LOCALE%");
+        };
+        
+        function getClientTime() {
+            var date = new Date()
+            var timezoneOffset = date.getTimezoneOffset() * 60;
+            return Math.round(date.getTime()/1000 - timezoneOffset);
+        }
+        
+        function ticker() {
+            window.server_timestamp++;
+            document.getElementById("time").innerText = secondsToHms(window.server_timestamp);
+            document.getElementById("client_time").innerText = secondsToHms(getClientTime());
+        };
+        window.onload = function(e) {
+            window.server_timestamp = %TIMESTAMP%;
+            setInterval(ticker, 1000);
+        };
+    </script>
+</body>
+</html>

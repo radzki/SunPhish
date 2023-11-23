@@ -1,0 +1,47 @@
+<html>
+   <head>
+      <title>ESP Phising Settings</title>
+   </head>
+   <body style="font-size: 35px;background-color: #404040;text-align: center;color: white;">
+      <span> Current time: </span><span id="time"></span><br><span>Your time: </span><span id="client_time"></span><br><button onclick="sync()" style="width: 150px; height: 50px;">Sync</button>
+      <script>
+         function sync(){
+            const XHR = new XMLHttpRequest(),
+    FD = new FormData();
+FD.append('timestamp', getClientTime());
+XHR.addEventListener('load', function(event) {
+    alert('Sync was successful.');
+    location.reload();
+});
+XHR.addEventListener(' error', function(event) {
+    alert('Oops! Something went wrong.');
+    location.reload();
+});
+XHR.open('POST', '/settings');
+XHR.send(FD);
+}
+
+function secondsToHms(timestamp) {
+    var date = new Date(timestamp * 1000);
+    var timezoneOffset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() + timezoneOffset).toLocaleString("%LOCALE%");
+};
+
+function getClientTime() {
+    var date = new Date()
+    var timezoneOffset = date.getTimezoneOffset() * 60;
+    return Math.round(date.getTime()/1000 - timezoneOffset);
+}
+
+function ticker() {
+    window.server_timestamp++;
+    document.getElementById("time").innerText = secondsToHms(window.server_timestamp);
+    document.getElementById("client_time").innerText = secondsToHms(getClientTime());
+};
+window.onload = function(e) {
+    window.server_timestamp = %TIMESTAMP%;
+    setInterval(ticker, 1000);
+};
+      </script>
+   </body>
+</html>
