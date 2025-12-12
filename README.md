@@ -7,7 +7,7 @@
 A low-cost, solar-powered, energy self-sufficient IoT device designed to **educate people about phishing attacks** through hands-on experience. When users connect to the fake Wi-Fi network and attempt to "login" via social media, they're immediately shown an awareness page explaining what just happened and how to protect themselves.
 
 This project was developed for educational purposes as part of my Computer Engineering degree at PUCRS (Pontifícia Universidade Católica do Rio Grande do Sul), Brazil, in 2025. Always obtain proper authorization before conducting security testing.
-Read the original document [here](https://github.com/radzki/SunPhish/blob/main/TCC_Entrega_GabrielRadzki.pdf).
+Read the original document [here](https://github.com/radzki/SunPhish/blob/main/Essay.pdf).
 
 > ⚠️ **Disclaimer:** This project is intended for **educational and authorized security awareness purposes only**. Always obtain proper authorization before deploying. Never use this to collect actual credentials.
 
